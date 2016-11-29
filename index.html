@@ -2,7 +2,7 @@
 <html>
     <head>
         <title>
-            My Space - Charchit.gq
+            Just Play
         </title>
         <script
             src="https://code.jquery.com/jquery-3.1.1.min.js"
@@ -16,37 +16,66 @@
         <!-- Latest compiled and minified JavaScript -->
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
         <script src="js/app.js"></script>
+		<link rel="stylesheet" href="css/style.css" />
     </head>
 <body ng-app=myAudioApp>
     <div ng-controller="mainCtrlr" class="container">
-		<div class="row" id="player">
+		<div class="row" id="playerDiv">
 			<div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
 				<audio id="mainAudio">
 					HTML5 audio not supported
 				</audio>
 			</div>
+			<br>
+			<button id="play" ng-click="playAudio()" ng-hide=audioPlayingFlag>
+			  Play
+			</button>
+			<button id="pause" ng-click="pauseAudio()" ng-show=audioPlayingFlag>
+			  Pause
+			</button>
+			<button ng-click="prevAudio();">
+			  Rewind
+			</button>
+			<button ng-click="nextAudio();">
+			  Fast forward
+			</button>
+			<button ng-click="restartAudio();">
+			  Restart
+			</button>
+			<br><br><br>
+			<input type="range" step="any" id="audioSeekbar" onchange="ChangeTheTime()" value="0"></input>
+			<label id="lblTime">-:--:--</label>
+			<br>
+			Volume :<input type="range" min="0" max="1" step="0.1" id="volume" onchange="ChangeVolume()">
 		</div>
 		<br><br>
-		<button id="play" ng-click="playAudio()">
-		  Play
-		</button>
-		
-		<button onclick="prevAudio();">
-		  Rewind
-		</button>
-		<button onclick="nextAudio();">
-		  Fast forward
-		</button>
-		<button onclick="restartAudio();">
-		  Restart
-		</button>
-		<br>
         <div class="row">
-            <ul ng-repeat='song in songsList'>
-                <li>
-                    <a ng-click="playSound(song.url)">{{song.title}}</a>
-                </li>
-            </ul>
+			<div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+				<table class="table table-inverse">
+				<thead>
+					<tr>
+					  <th>#</th>
+					  <th>Song Name</th>
+					  <th>Artist</th>
+					  <th>Length</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat='song in songsList'>
+						<td>{{$index + 1}}</td>
+						<td>
+							<a ng-click="loadAudio(song)">{{song.title}}</a>
+						</td>
+						<td>
+							<a ng-click="loadAudio(song)">{{song.artist}}</a>
+						</td>
+						<td>
+							<a ng-click="loadAudio(song)">{{song.length}}</a>
+						</td>
+					</tr>
+				</tbody>
+				</table>
+			</div>
         </div>
     </div>
 </body>

@@ -2,60 +2,58 @@ var myAudioApp=angular.module('myAudioApp',[]);
 
 myAudioApp.controller('mainCtrlr',function($scope){
    $scope.songsList= [{
-                        id: "1",
 						title: 'Kalimba',
 						artist: 'Mr. Scruff',
-						url: 'C:/Users/Public/Music/Sample Music/Kalimba.mp3'
+						url: 'C:/Users/Public/Music/Sample Music/Kalimba.mp3',
+						length: '2:03'
                      },
                      {
-                        id: "1",
 						title: 'Maid with the Flaxen Hair',
 						artist: 'Mr. Scruff',
-						url: 'C:/Users/Public/Music/Sample Music/Maid with the Flaxen Hair.mp3'
+						url: 'C:/Users/Public/Music/Sample Music/Maid with the Flaxen Hair.mp3',
+						length: '3:28'
                      },
                      {
-                        id: "1",
 						title: 'Sleep Away',
 						artist: 'Mr. Scruff',
-						url: 'C:/Users/Public/Music/Sample Music/Sleep Away.mp3'
+						url: 'C:/Users/Public/Music/Sample Music/Sleep Away.mp3',
+						length: '2:13'
                      },
                      {
-                        id: "1",
 						title: 'Kalimba',
 						artist: 'Mr. Scruff',
-						url: 'C:/Users/Public/Music/Sample Music/Kalimba.mp3' 
+						url: 'C:/Users/Public/Music/Sample Music/Kalimba.mp3',
+						length: '2:55'
                      }];
-	$scope.playSound=function(input){
-		console.log("You just clicked for url : "+input);
-        $scope.audioURL=input;
+	
+	var mainAudio = document.getElementById('mainAudio');
+	$scope.audioPlayingFlag=false;
+	// $scope.seekbar = document.getElementById("audioSeekBar");
+	
+	$scope.loadAudio=function(input){
+		console.log("You just clicked for url : "+input.url);
+        $scope.audioURL=input.url;
+		$scope.currentIndex = getIndexOf($scope.songsList, input.url, 'url');
+		UpdateTheTime();
+		$scope.playAudio();
     };
 	
 	var currentFile = "";
     $scope.playAudio = function(){
             // Check for audio element support.
             if (window.HTMLAudioElement) {
-				console.log("SDfs")
                 try {
-					var audioURL='C:/Users/Public/Music/Sample Music/Kalimba.mp3';
-                    var oAudio = document.getElementById('mainAudio');
-                    var btn = document.getElementById('play'); 
-                    //var audioURL = document.getElementById('audiofile'); 
-
-                    //Skip loading if current file hasn't changed.
-                    if (audioURL !== currentFile) {
-                        oAudio.src = audioURL;
-                        currentFile = audioURL;                       
+					if($scope.audioURL=='' || angular.isUndefined($scope.audioURL)){
+						$scope.loadAudio($scope.songsList[0]);
+					}
+					//Skip loading if current file hasn't changed.
+                    if ($scope.audioURL !== currentFile) {
+                        mainAudio.src = $scope.audioURL;
+                        currentFile = $scope.audioURL;                       
                     }
-
-                    // Tests the paused attribute and set state. 
-                    if (oAudio.paused) {
-                        oAudio.play();
-                        btn.textContent = "Pause";
-                    }
-                    else {
-                        oAudio.pause();
-                        btn.textContent = "Play";
-                    }
+                    
+					mainAudio.play();
+					$scope.audioPlayingFlag=true;
                 }
                 catch (e) {
                     // Fail silently but show in F12 developer tools console
@@ -64,12 +62,82 @@ myAudioApp.controller('mainCtrlr',function($scope){
             }
         }
 		
+	$scope.pauseAudio = function(){
+		mainAudio.pause();
+		$scope.audioPlayingFlag=false;
+	};
+		
+	$scope.prevAudio = function(){
+		mainAudio.pause();
+		if($scope.currentIndex > 0){
+			$scope.loadAudio($scope.songsList[$scope.currentIndex-1]);
+		}
+		else{
+			//reload the current track
+			$scope.loadAudio($scope.songsList[0]);
+		}
+	};
+	
+	$scope.nextAudio = function(){
+		mainAudio.pause();
+		if($scope.currentIndex < $scope.songsList.length){
+			$scope.loadAudio($scope.songsList[$scope.currentIndex+1]);
+		}
+		else{
+			//loop play list
+			console.log("Play list finished, Starting from the beginning");
+			$scope.loadAudio($scope.songsList[0]);
+		}
+	};
+	
+		// Fired when an audio is finished playing
+	mainAudio.addEventListener('ended',function(){
+		console.log("Audio finished playing, switching to next one in the list");
+		mainAudio.pause();
+		if($scope.currentIndex < $scope.songsList.length){
+			$scope.loadAudio($scope.songsList[$scope.currentIndex+1]);
+		}
+		else{
+			//loop play list
+			console.log("Play list finished, Starting from the beginning");
+			$scope.loadAudio($scope.songsList[0]);
+		}
+    });
+	
+	mainAudio.addEventListener('timeupdate', UpdateTheTime, false);
+	mainAudio.addEventListener('durationchange', SetSeekBar, false);
+	volume.value = mainAudio.volume;
+	
+	// fires when page loads, it sets the min and max range of the video
+
+    function SetSeekBar() {
+       audioSeekbar.min = 0;
+       audioSeekbar.max = mainAudio.duration;
+    }
+
+    // fires when seekbar is changed
+
+	function UpdateTheTime() {
+	   var sec = mainAudio.currentTime;
+	   var h = Math.floor(sec / 3600);
+	   sec = sec % 3600;
+	   var min = Math.floor(sec / 60);
+	   sec = Math.floor(sec % 60);
+	   if (sec.toString().length < 2) sec = "0" + sec;
+	   if (min.toString().length < 2) min = "0" + min;
+	   document.getElementById('lblTime').innerHTML = h + ":" + min + ":" + sec;
+	   audioSeekbar.min = mainAudio.startTime;
+	   audioSeekbar.max = mainAudio.duration;
+	   audioSeekbar.value = mainAudio.currentTime;
+       }
+			
+			// Rewinds the audio file by 30 seconds.
 	function rewindAudio() {
              // Check for audio element support.
             if (window.HTMLAudioElement) {
                 try {
-                    var oAudio = document.getElementById('myaudio');
-                    oAudio.currentTime -= 30.0;
+                    var mainAudio = document.getElementById('myaudio');
+                    mainAudio.currentTime -= 30.0;
                 }
                 catch (e) {
                     // Fail silently but show in F12 developer tools console
@@ -79,14 +147,13 @@ myAudioApp.controller('mainCtrlr',function($scope){
         }
 
              // Fast forwards the audio file by 30 seconds.
-
-        function forwardAudio() {
+    function forwardAudio() {
 
              // Check for audio element support.
             if (window.HTMLAudioElement) {
                 try {
-                    var oAudio = document.getElementById('myaudio');
-                    oAudio.currentTime += 30.0;
+                    var mainAudio = document.getElementById('myaudio');
+                    mainAudio.currentTime += 30.0;
                 }
                 catch (e) {
                     // Fail silently but show in F12 developer tools console
@@ -96,13 +163,12 @@ myAudioApp.controller('mainCtrlr',function($scope){
         }
 
              // Restart the audio file to the beginning.
-
-        function restartAudio() {
+    function restartAudio() {
              // Check for audio element support.
             if (window.HTMLAudioElement) {
                 try {
-                    var oAudio = document.getElementById('myaudio');
-                    oAudio.currentTime = 0;
+                    var mainAudio = document.getElementById('myaudio');
+                    mainAudio.currentTime = 0;
                 }
                 catch (e) {
                     // Fail silently but show in F12 developer tools console
@@ -110,4 +176,29 @@ myAudioApp.controller('mainCtrlr',function($scope){
                }
             }
         }
+	
+	function getIndexOf(arr, val, prop) {
+      var l = arr.length,
+        k = 0;
+      for (k = 0; k < l; k = k + 1) {
+        if (arr[k][prop] === val) {
+          return k;
+        }
+      }
+      return false;
+    }
 });
+
+function ChangeTheTime() {
+		mainAudio.currentTime = audioSeekbar.value;
+	}
+ function ChangeVolume() {
+	var myVol = volume.value;
+	mainAudio.volume = myVol;
+	if (myVol == 0) {
+	   mainAudio.muted = true;
+	} 
+	else {
+	   mainAudio.muted = false;
+	}
+}
