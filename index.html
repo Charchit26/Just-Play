@@ -20,33 +20,49 @@
     </head>
 <body ng-app=myAudioApp>
     <div ng-controller="mainCtrlr" class="container">
-		<div class="row" id="playerDiv">
+		<div class="row playerDiv">
 			<div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
 				<audio id="mainAudio">
 					HTML5 audio not supported
 				</audio>
 			</div>
 			<br>
-			<button id="play" ng-click="playAudio()" ng-hide=audioPlayingFlag>
-			  Play
-			</button>
-			<button id="pause" ng-click="pauseAudio()" ng-show=audioPlayingFlag>
-			  Pause
-			</button>
-			<button ng-click="prevAudio();">
-			  Rewind
-			</button>
-			<button ng-click="nextAudio();">
-			  Fast forward
-			</button>
-			<button ng-click="restartAudio();">
-			  Restart
-			</button>
+			<div class="controls">
+			<span>
+			<img src="images/control_repeat.png" ng-click="restartAudio();" onmouseover="this.src='images/control_repeat_hover.png'" onmouseout="this.src='images/control_repeat.png'" />
+			</span><span>
+			<img src="images/control_start.png" ng-click="prevAudio();" onmouseover="this.src='images/control_start_hover.png'" onmouseout="this.src='images/control_start.png'" />
+			</span><span>
+			<img src="images/control_play.png" id="play"  ng-click="playAudio()" ng-if=!audioPlayingFlag onmouseover="this.src='images/control_play_hover.png'" onmouseout="this.src='images/control_play.png'" />
+			<img src="images/control_pause.png"  id="pause" ng-click="pauseAudio()" ng-if=audioPlayingFlag onmouseover="this.src='images/control_pause_hover.png'" onmouseout="this.src='images/control_pause.png'" />
+			</span><span>
+			<img src="images/control_end.png" ng-click="nextAudio();" onmouseover="this.src='images/control_end_hover.png'" onmouseout="this.src='images/control_end.png'" />
+			</span><span>
+			<img src="images/control_restart.png" ng-click="shuffle();" onmouseover="this.src='images/control_restart_hover.png'" onmouseout="this.src='images/control_restart.png'" />
+			</span>
+			</div>
 			<br><br><br>
-			<input type="range" step="any" id="audioSeekbar" onchange="ChangeTheTime()" value="0"></input>
-			<label id="lblTime">-:--:--</label>
+			<div class="seekbar">
+				<label id="lblTime" for="audioSeekbar">-:--:--</label>
+				<input type="range" name="audioSeekbar" step="any" id="audioSeekbar" onchange="ChangeTheTime()" value="0"></input>
+				<label id="lblTimeLength" for="audioSeekbar">-:--:--</label>
+			</div>
 			<br>
-			Volume :<input type="range" min="0" max="1" step="0.1" id="volume" onchange="ChangeVolume()">
+			<div>
+				<span class="cSong">
+					<span ng-if='currentSong' class="currentSong">
+						{{currentSong.title}} by {{currentSong.artist}}
+					</span>
+					<br>
+					<form id="box">
+						<input type="text" class="hidden" id="fileInput"/>
+						<img src="images/add.png" id="cSongImg"/>
+					</form>
+				</span>
+				<span class="volume">
+					<img src="images/volume.png"><input type="range" min="0" max="1" step="0.1" id="volume" onchange="ChangeVolume()">
+				</span>
+			</div>
 		</div>
 		<br><br>
         <div class="row">

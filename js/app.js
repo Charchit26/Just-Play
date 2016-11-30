@@ -1,6 +1,10 @@
 var myAudioApp=angular.module('myAudioApp',[]);
 
-myAudioApp.controller('mainCtrlr',function($scope){
+myAudioApp.controller('mainCtrlr',function($scope,$http){
+	$http.get('https://intense-brushlands-97524.herokuapp.com/list/3').
+        then(function(response) {
+            $scope.songsList = response.data;
+        });
    $scope.songsList= [{
 						title: 'Kalimba',
 						artist: 'Mr. Scruff',
@@ -29,9 +33,11 @@ myAudioApp.controller('mainCtrlr',function($scope){
 	var mainAudio = document.getElementById('mainAudio');
 	$scope.audioPlayingFlag=false;
 	// $scope.seekbar = document.getElementById("audioSeekBar");
+	$scope.currentSong='';
 	
 	$scope.loadAudio=function(input){
-		console.log("You just clicked for url : "+input.url);
+		console.log("New song loaded : "+input.url);
+		$scope.currentSong=input;
         $scope.audioURL=input.url;
 		$scope.currentIndex = getIndexOf($scope.songsList, input.url, 'url');
 		UpdateTheTime();
@@ -126,6 +132,14 @@ myAudioApp.controller('mainCtrlr',function($scope){
 	   if (sec.toString().length < 2) sec = "0" + sec;
 	   if (min.toString().length < 2) min = "0" + min;
 	   document.getElementById('lblTime').innerHTML = h + ":" + min + ":" + sec;
+	   var sec2 = mainAudio.duration;
+	   var h2 = Math.floor(sec2 / 3600);
+	   sec2 = sec2 % 3600;
+	   var min2 = Math.floor(sec2 / 60);
+	   sec2 = Math.floor(sec2 % 60);
+	   if (sec2.toString().length < 2) sec2 = "0" + sec2;
+	   if (min2.toString().length < 2) min2 = "0" + min2;
+	   document.getElementById('lblTimeLength').innerHTML = h2 + ":" + min2 + ":" + sec2;
 	   audioSeekbar.min = mainAudio.startTime;
 	   audioSeekbar.max = mainAudio.duration;
 	   audioSeekbar.value = mainAudio.currentTime;
@@ -187,6 +201,18 @@ myAudioApp.controller('mainCtrlr',function($scope){
       }
       return false;
     }
+
+	$scope.shuffle = function() {
+		var i = $scope.songsList.length;
+		if ( i == 0 ) return false;
+		while ( --i ) {
+			var j = Math.floor( Math.random() * ( i + 1 ) );
+			var tempi = $scope.songsList[i];
+			var tempj = $scope.songsList[j];
+			$scope.songsList[i] = tempj;
+			$scope.songsList[j] = tempi;
+		}
+	}
 });
 
 function ChangeTheTime() {
@@ -202,3 +228,16 @@ function ChangeTheTime() {
 	   mainAudio.muted = false;
 	}
 }
+
+$(document).ready(function() {
+    $('#cSongImg').click(function() {
+        $("#fileInput").toggleClass('open');
+		$("#fileInput").toggleClass('hidden');
+    });
+	$('#fileInput').keypress(function(e) {
+		if(e.which == 13) {
+			alert($('#fileInput').val());
+			$("#cSongImg").click();
+		}
+	});
+});
