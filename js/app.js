@@ -1,14 +1,15 @@
 var myAudioApp=angular.module('myAudioApp',[]);
 
 myAudioApp.controller('mainCtrlr',function($scope,$http){
-	$http.get('https://intense-brushlands-97524.herokuapp.com/list/3').
-        then(function(response) {
-            $scope.songsList = response.data;
-        });
-   $scope.songsList= [{
-						title: 'Kalimba',
+	// $http.get('http://127.0.0.1:6656/d.json').
+ //       then(function(response) {
+ //           $scope.songList = JSON.parse(response.data);
+ //       });
+  
+  $scope.songsList=[{
+						title: 'Kaerfeerferfea',
 						artist: 'Mr. Scruff',
-						url: 'C:/Users/Public/Music/Sample Music/Kalimba.mp3',
+						url: "http://127.0.0.1:6656/Music/%23ENGLISH/I'll%20Be%20There%20For%20You.mp3",
 						length: '2:03'
                      },
                      {
@@ -28,7 +29,7 @@ myAudioApp.controller('mainCtrlr',function($scope,$http){
 						artist: 'Mr. Scruff',
 						url: 'C:/Users/Public/Music/Sample Music/Kalimba.mp3',
 						length: '2:55'
-                     }];
+                     }]
 	
 	var mainAudio = document.getElementById('mainAudio');
 	$scope.audioPlayingFlag=false;
