@@ -9,7 +9,7 @@ myAudioApp.controller('mainCtrlr',function($scope,$http){
   $scope.songsList=[{
 						title: 'Kaerfeerferfea',
 						artist: 'Mr. Scruff',
-						url: "http://127.0.0.1:6656/Ekla Cholo Re - Tamilmini.net.mp3",
+						url: "http://127.0.0.1:6656/Ekla%20Cholo%20Re%20-%20Tamilmini.net.mp3",
 						length: '2:03'
                      },
                      {
