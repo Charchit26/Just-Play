@@ -1,13 +1,14 @@
 var myAudioApp=angular.module('myAudioApp',[]);
 
 myAudioApp.controller('mainCtrlr',function($scope,$http){
-	// $http.get('http://127.0.0.1:6656/d.json').
- //       then(function(response) {
- //           $scope.songList = JSON.parse(response.data);
- //       });
+	$http.get('http://127.0.0.1:6656/index.json').
+        then(function(response) {
+			$scope.songsList=response.data;
+			console.log($scope.songsList);
+        });
   
-  $scope.songsList=[{
-						title: 'Kaerfeerferfea',
+  /*$scope.sosList=[{
+						title: 'Ekla Cholo Re',
 						artist: 'Mr. Scruff',
 						url: "http://127.0.0.1:6656/Ekla%20Cholo%20Re%20-%20Tamilmini.net.mp3",
 						length: '2:03'
@@ -15,7 +16,7 @@ myAudioApp.controller('mainCtrlr',function($scope,$http){
                      {
 						title: 'Maid with the Flaxen Hair',
 						artist: 'Mr. Scruff',
-						url: 'C:/Users/Public/Music/Sample Music/Maid with the Flaxen Hair.mp3',
+						url: 'http://127.0.0.1:6656/twenty%20one%20pilots-%20Heathens%20(from%20Suicide%20Squad-%20The%20Album)%20%5BOFFICIAL%20VIDEO%5D.mp4',
 						length: '3:28'
                      },
                      {
@@ -30,7 +31,7 @@ myAudioApp.controller('mainCtrlr',function($scope,$http){
 						url: 'C:/Users/Public/Music/Sample Music/Kalimba.mp3',
 						length: '2:55'
                      }]
-	
+	*/
 	var mainAudio = document.getElementById('mainAudio');
 	$scope.audioPlayingFlag=false;
 	// $scope.seekbar = document.getElementById("audioSeekBar");
