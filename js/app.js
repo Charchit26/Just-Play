@@ -4,7 +4,6 @@ myAudioApp.controller('mainCtrlr',function($scope,$http){
 	$http.get('http://127.0.0.1:6656/index.json').
         then(function(response) {
 			$scope.songsList=response.data;
-			console.log($scope.songsList);
         });
   
   /*$scope.sosList=[{
