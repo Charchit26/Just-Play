@@ -1,2 +1,27 @@
-#controls{
+.cSong{
+	background-color: cyan;
+}
+.art{
+	height: 250px;
+	width:100%;
+	background-image: url("../images/download.jpg");
+	z-index: -2;
+}
+.seekbar{
+	height: 5%;
+	width:100%;
+	background-color: blue;
+	z-index: -1;
+}
+.controls{
+	height: 15%;
+	background-color: white;
+	margin-left: 15%;
+}
+.controls span{
+	display:inline-block;
+	margin-left: 2%;
+}
+.controls span:hover{
+	cursor: pointer;
 }
