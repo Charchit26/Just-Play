@@ -18,23 +18,19 @@
 					HTML5 audio not supported
 				</audio>
 		</div>
-		<!-- <div class="art">
+		<div class="art" back-img="{{currentPlayingFile.art}}">
 			<div class="cSong">
 				<div ng-if="currentSong" class="currentSong">
 					<b>{{currentSong.title}}</b> <i>by</i> <b>{{currentSong.artist}}</b>
 				</div>
-				Add file/folder
-				<form id="box">
-					<input type="text" class="hidden" id="fileInput"/>
-					<img src="images/add.png" id="cSongImg"/>
-				</form>
 			</div>
-		
-			
-		</div> -->
+		</div>
 		<div class="seekbar">
 			<input type="range" name="audioSeekbar" step="any" id="audioSeekbar" onchange="ChangeTheTime()" value="0" />
-			<label id="lblTime" for="audioSeekbar">-:--:--</label> | <label id="lblTimeLength" for="audioSeekbar">-:--:--</label>
+			<label id="lblTime">-:--:--</label> | <label id="lblTimeLength">-:--:--</label>
+      <span class="volume">
+			     <img src="images/volume.png"><input type="range" min="0" max="1" step="0.1" id="volume" onchange="ChangeVolume()">
+		  </span>
 		</div>
 		<div class="controls">
     		<span><img src="images/shuffle.png" ng-click="restartAudio();"/>
@@ -52,9 +48,6 @@
     		<span><img src="images/repeat.png" ng-click="restartAudio();"/>
     		</span>
     	</div>
-    	<!-- <div class="volume">
-			<img src="images/volume.png"><input type="range" min="0" max="1" step="0.1" id="volume" onchange="ChangeVolume()">
-		</div> -->
 	</div>
 </body>
 </html>

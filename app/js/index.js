@@ -1,4 +1,17 @@
 var myApp=angular.module('myApp',[]);
+myApp.directive('backImg', function(){
+    return function(scope, element, attrs){
+        attrs.$observe('backImg', function(value) {
+						if(value=='' || value=='undefined'){
+							value="images/download.jpg";
+						}
+            element.css({
+                'background-image': 'url(' + value +')',
+                'background-size' : 'cover'
+            });
+        });
+    };
+});
 
 myApp.controller('mainController',function($scope){
 	var mainAudio = document.getElementById('mainAudio');
@@ -9,14 +22,17 @@ myApp.controller('mainController',function($scope){
 		title:"channa mereya",
 		artist: "arijit"
 	}];
+
 	$scope.loadAudio=function(audioToBeLoaded){
 		console.log("new song to be loaded: ",audioToBeLoaded);
 		currentPlayingFile=audioToBeLoaded;
+		$scope.currentSong=currentPlayingFile;
 		//$scope.currentIndex = getIndexOf($scope.songsList, input.url, 'url');
+		mainAudio.src = currentPlayingFile.url;
 		UpdateTheTime();
 		$scope.playAudio();
 	}
-	
+
 	$scope.playAudio=function(){
 		if (window.HTMLAudioElement) {
             try {
@@ -24,7 +40,6 @@ myApp.controller('mainController',function($scope){
 					$scope.loadAudio($scope.dummyList[0]);
 				}//load some audio if there is nothing to play
 				//Skip loading if current file hasn't changed.
-                mainAudio.src = currentPlayingFile.url;                      
 				mainAudio.play();
 				$scope.audioPlayingFlag=true;
             }
@@ -34,23 +49,23 @@ myApp.controller('mainController',function($scope){
             }
 		}
 	}
-	
+
 	$scope.pauseAudio=function(){
 		mainAudio.pause();
 		$scope.audioPlayingFlag=false;
 	}
-	
+
 	mainAudio.addEventListener('timeupdate', UpdateTheTime, false);
-	mainAudio.addEventListener('durationchange', SetSeekBar, false);
+	mainAudio.addEventListener('durationchange', UpdateTheTime, false);
 	//volume.value = mainAudio.volume;
-	
+
 	// fires when page loads, it sets the min and max range of the video
 
     function SetSeekBar() {
        audioSeekbar.min = 0;
        audioSeekbar.max = mainAudio.duration;
     }
-    
+
 	// fires when seekbar is changed
 
 	function UpdateTheTime() {
@@ -86,7 +101,7 @@ function ChangeVolume() {
 	mainAudio.volume = myVol;
 	if (myVol == 0) {
 	   mainAudio.muted = true;
-	} 
+	}
 	else {
 	   mainAudio.muted = false;
 	}

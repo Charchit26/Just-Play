@@ -4,14 +4,23 @@
 .art{
 	height: 250px;
 	width:100%;
-	background-image: url("../images/download.jpg");
-	z-index: -2;
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+		margin: 0;
+		padding: 0;
+		position: relative;
 }
-.seekbar{
-	height: 5%;
-	width:100%;
-	background-color: blue;
-	z-index: -1;
+.cSong{
+	position: absolute;
+	width: 100%;
+	height: 30px;
+	bottom: 0;
+  background-color: rgba(0,0,0,0.8);
+	color: white;
+}
+#audioSeekbar{
+	width: 100%;
+	border:solid;
 }
 .controls{
 	height: 15%;
@@ -24,4 +33,46 @@
 }
 .controls span:hover{
 	cursor: pointer;
+}
+
+/*Chrome*/
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+    .seekbar input[type='range'] {
+      overflow: hidden;
+      -webkit-appearance: none;
+      margin-top: -1px;
+      background-color: white;
+    }
+
+    .seekbar input[type='range']::-webkit-slider-runnable-track {
+      height: 10px;
+      -webkit-appearance: none;
+      color: #13bba4;
+      margin-top: -1px;
+      cursor: pointer;
+    }
+
+    .seekbar input[type='range']::-webkit-slider-thumb {
+      width: 1px;
+      -webkit-appearance: none;
+      height: 10px;
+      cursor: ew-resize;
+      background: #434343;
+      box-shadow: -300px 0 0 300px #43e5f7;
+    }
+
+}
+/** FF*/
+.seekbar input[type="range"]::-moz-range-progress {
+  background-color: #43e5f7;
+}
+.seekbar input[type="range"]::-moz-range-track {
+  background-color: #9a905d;
+}
+/* IE*/
+.seekbar input[type="range"]::-ms-fill-lower {
+  background-color: #43e5f7;
+}
+.seekbar input[type="range"]::-ms-fill-upper {
+  background-color: #9a905d;
 }
