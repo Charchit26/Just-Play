@@ -21,7 +21,7 @@
 		<div class="art" back-img="{{currentPlayingFile.art}}">
 			<div class="cSong">
 				<div ng-if="currentSong" class="currentSong">
-					<b>{{currentSong.title}}</b> <i>by</i> <b>{{currentSong.artist}}</b>
+					<b>{{currentSong.title}}</b> <i ng-if='currentSong.artist'>by</i> <b>{{currentSong.artist}}</b>
 				</div>
 			</div>
 		</div>

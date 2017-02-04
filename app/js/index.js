@@ -1,4 +1,72 @@
 var myApp=angular.module('myApp',[]);
+
+var id3 = require('id3js');
+var allowedExt = ['.mp3', '.mp4', '.mkv'];
+var allowedExtSet = new Set(allowedExt);
+var fs = require('fs');
+var path = require('path');
+var walk=function(dir, done) {
+  var results = [];
+  fs.readdir(dir, function(err, list) {
+    if (err) return done(err);
+    var pending = list.length;
+    if (!pending) return done(null, results);
+    list.forEach(function(file) {
+      file = path.resolve(dir, file);
+      fs.stat(file, function(err, stat) {
+        if (stat && stat.isDirectory()) {
+          walk(file, function(err, res) {
+            results = results.concat(res);
+            if (!--pending) done(null, results);
+          });
+        } else {
+          if(allowedExtSet.has(path.extname(file))){
+              results.push(file);
+          }
+          if (!--pending) done(null, results);
+        }
+      });
+    });
+  });
+};
+var JSONArray=[];
+walk('D:/CHARCHIT/Music/2 States',function(err,results) {
+    if(err){
+      throw err;
+    }
+    else{
+      results.forEach(function(f){
+        id3({ file: f, type: id3.OPEN_LOCAL }, function(err, tags) {
+            // tags now contains your ID3 tags
+            if(err){
+              console.log('Error in getting ID3 tags'+err);
+            }
+            else{
+              if(tags.v2.title == '' || tags.v2.title == undefined){
+                tags.v2.title=path.basename(f);
+              }
+                var JSONObj={
+                  url: f,
+                  title: tags.v2.title,
+                  artist: tags.v2.artist,
+                  album: tags.v2.album,
+                  band: tags.v2.band,
+                  genre: tags.v2.genre,
+                  image: tags.v2.image
+              };
+              JSONArray.push(JSONObj);
+              if(JSONArray.length==results.length){
+                console.log(JSONArray);
+              }
+            }
+          })
+        });
+    }
+});
+
+
+
+
 myApp.directive('backImg', function(){
     return function(scope, element, attrs){
         attrs.$observe('backImg', function(value) {
@@ -17,17 +85,18 @@ myApp.controller('mainController',function($scope){
 	var mainAudio = document.getElementById('mainAudio');
 	var currentPlayingFile = "";
 	$scope.audioPlayingFlag=false;
-	$scope.dummyList=[{
-		url:"a.mp3",
-		title:"channa mereya",
-		artist: "arijit"
-	}];
+	$scope.songsList=JSONArray;
+  // [{
+	// 	url:"a.mp3",
+	// 	title:"channa mereya",
+	// 	artist: "arijit"
+	// }];
 
 	$scope.loadAudio=function(audioToBeLoaded){
 		console.log("new song to be loaded: ",audioToBeLoaded);
 		currentPlayingFile=audioToBeLoaded;
 		$scope.currentSong=currentPlayingFile;
-		//$scope.currentIndex = getIndexOf($scope.songsList, input.url, 'url');
+		$scope.currentIndex = getIndexOf($scope.songsList, audioToBeLoaded.url, 'url');
 		mainAudio.src = currentPlayingFile.url;
 		UpdateTheTime();
 		$scope.playAudio();
@@ -37,7 +106,7 @@ myApp.controller('mainController',function($scope){
 		if (window.HTMLAudioElement) {
             try {
 				if(currentPlayingFile=='' || currentPlayingFile=='undefined'){
-					$scope.loadAudio($scope.dummyList[0]);
+					$scope.loadAudio($scope.songsList[0]);
 				}//load some audio if there is nothing to play
 				//Skip loading if current file hasn't changed.
 				mainAudio.play();
@@ -54,6 +123,33 @@ myApp.controller('mainController',function($scope){
 		mainAudio.pause();
 		$scope.audioPlayingFlag=false;
 	}
+
+
+	$scope.nextAudio = function(){
+		mainAudio.pause();
+		if($scope.currentIndex < $scope.songsList.length){
+			$scope.loadAudio($scope.songsList[$scope.currentIndex+1]);
+		}
+		else{
+			//loop play list
+			console.log("Play list finished, Starting from the beginning");
+			$scope.loadAudio($scope.songsList[0]);
+		}
+	};
+
+		// Fired when an audio is finished playing
+	mainAudio.addEventListener('ended',function(){
+		console.log("Audio finished playing, switching to next one in the list");
+		mainAudio.pause();
+		if($scope.currentIndex < $scope.songsList.length){
+			$scope.loadAudio($scope.songsList[$scope.currentIndex+1]);
+		}
+		else{
+			//loop play list
+			console.log("Play list finished, Starting from the beginning");
+			$scope.loadAudio($scope.songsList[0]);
+		}
+    });
 
 	mainAudio.addEventListener('timeupdate', UpdateTheTime, false);
 	mainAudio.addEventListener('durationchange', UpdateTheTime, false);
@@ -89,6 +185,29 @@ myApp.controller('mainController',function($scope){
 	   audioSeekbar.max = mainAudio.duration;
 	   audioSeekbar.value = mainAudio.currentTime;
     }
+
+    function getIndexOf(arr, val, prop) {
+        var l = arr.length,
+          k = 0;
+        for (k = 0; k < l; k = k + 1) {
+          if (arr[k][prop] === val) {
+            return k;
+          }
+        }
+        return false;
+      }
+
+  	$scope.shuffle = function() {
+  		var i = $scope.songsList.length;
+  		if ( i == 0 ) return false;
+  		while ( --i ) {
+  			var j = Math.floor( Math.random() * ( i + 1 ) );
+  			var tempi = $scope.songsList[i];
+  			var tempj = $scope.songsList[j];
+  			$scope.songsList[i] = tempj;
+  			$scope.songsList[j] = tempi;
+  		}
+  	}
 });
 
 //vanilla functions
