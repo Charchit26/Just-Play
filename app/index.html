@@ -19,10 +19,8 @@
 				</audio>
 		</div>
 		<div class="art" back-img="{{currentPlayingFile.art}}">
-			<div class="cSong">
-				<div ng-if="currentSong" class="currentSong">
-					<b>{{currentSong.title}}</b> <i ng-if='currentSong.artist'>by</i> <b>{{currentSong.artist}}</b>
-				</div>
+			<div ng-if="currentSong" class="cSong">
+				<b>{{currentSong.title}}</b> <i ng-if='currentSong.artist'>by</i> <b>{{currentSong.artist}}</b>
 			</div>
 		</div>
 		<div class="seekbar">
