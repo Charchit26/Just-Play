@@ -6,6 +6,7 @@
     "start": "electron ."
   },
   "devDependencies": {
-    "electron": "^1.4.13"
+    "electron": "^1.4.13",
+    "id3js" : ""
   }
 }

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="UTF-8">
     <title>Just-Play</title>
@@ -8,44 +9,69 @@
     <script src="js/bootstrap.js"></script>
     <script src="js/angular-route.js"></script>
     <script src="js/index.js"></script>
-    <link href="css/bootstrap.css" rel="stylesheet" type="text/css"/>
-    <link href="css/mainStyles.css" rel="stylesheet" type="text/css"/>
+    <link href="css/bootstrap.css" rel="stylesheet" type="text/css" />
+    <link href="css/mainStyles.css" rel="stylesheet" type="text/css" />
 </head>
+
 <body ng-app="myApp" ng-controller="mainController">
     <div id="player">
-    	<div>
-				<audio id="mainAudio">
-					HTML5 audio not supported
-				</audio>
-		</div>
-		<div class="art" back-img="{{currentPlayingFile.art}}">
-			<div ng-if="currentSong" class="cSong">
-				<b>{{currentSong.title}}</b> <i ng-if='currentSong.artist'>by</i> <b>{{currentSong.artist}}</b>
-			</div>
-		</div>
-		<div class="seekbar">
-			<input type="range" name="audioSeekbar" step="any" id="audioSeekbar" onchange="ChangeTheTime()" value="0" />
-			<label id="lblTime">-:--:--</label> | <label id="lblTimeLength">-:--:--</label>
-      <span class="volume">
-			     <img src="images/volume.png"><input type="range" min="0" max="1" step="0.1" id="volume" onchange="ChangeVolume()">
-		  </span>
-		</div>
-		<div class="controls">
-    		<span><img src="images/shuffle.png" ng-click="restartAudio();"/>
-			</span>
-    		<span>
-    			<img src="images/rew.png" ng-click="nextAudio();"/><!-- onmouseover="this.src='images/rew_hover.png'" onmouseout="this.src='images/rew.png'" /> -->
-			</span>
-    		<span>
-    			<img src="images/play.png" id="play" ng-click="playAudio()" ng-if="!audioPlayingFlag" onmouseover="this.src='images/play_hover.png'" onmouseout="this.src='images/play.png'" />
-				<img src="images/pause.png"  id="pause" ng-click="pauseAudio()" ng-if="audioPlayingFlag" onmouseover="this.src='images/pause_hover.png'" onmouseout="this.src='images/pause.png'" />
-			</span>
-    		<span>
-    			<img src="images/fwd.png" ng-click="nextAudio();" /><!-- onmouseover="this.src='images/fwd_hover.png'" onmouseout="this.src='images/fwd.png'" /> -->
-			</span>
-    		<span><img src="images/repeat.png" ng-click="restartAudio();"/>
-    		</span>
-    	</div>
-	</div>
+        <div>
+            <audio id="mainAudio">
+					         HTML5 audio not supported
+				    </audio>
+        </div>
+        <div class="art" back-img="{{currentPlayingFile.art}}">
+            <div ng-if="currentSong" class="cSong">
+                <b>{{currentSong.title}}</b> <i ng-if='currentSong.artist'>by</i> <b>{{currentSong.artist}}</b>
+            </div>
+        </div>
+        <div class="seekbar">
+            <input type="range" name="audioSeekbar" step="any" id="audioSeekbar" onchange="ChangeTheTime()" value="0" />
+            <label id="lblTime">-:--:--</label> | <label id="lblTimeLength">-:--:--</label>
+            <span class="volume">
+			           <img src="images/volume.png"><input type="range" min="0" max="1" step="0.1" id="volume" onchange="ChangeVolume()">
+		        </span>
+        </div>
+        <div class="controls">
+            <span>
+              <img src="images/shuffle.png" ng-click="restartAudio();"/>
+			      </span>
+            <span>
+              <img src="images/rew.png" ng-click="nextAudio();"/><!-- onmouseover="this.src='images/rew_hover.png'" onmouseout="this.src='images/rew.png'" /> -->
+			      </span>
+            <span>
+              <img src="images/play.png" id="play" ng-click="playAudio()" ng-if="!audioPlayingFlag" onmouseover="this.src='images/play_hover.png'" onmouseout="this.src='images/play.png'" />
+				      <img src="images/pause.png"  id="pause" ng-click="pauseAudio()" ng-if="audioPlayingFlag" onmouseover="this.src='images/pause_hover.png'" onmouseout="this.src='images/pause.png'" />
+			      </span>
+            <span>
+    			    <img src="images/fwd.png" ng-click="nextAudio();" /><!-- onmouseover="this.src='images/fwd_hover.png'" onmouseout="this.src='images/fwd.png'" /> -->
+			      </span>
+            <span>
+              <img src="images/repeat.png" ng-click="restartAudio();"/>
+    		    </span>
+        </div>
+    </div>
+    <div id="playlist">
+        <div id="addFiles">
+            <button id="addFolder" ng-click="addFolder()">Add Folder</button>
+        </div>
+        <div>
+            <table class="table-striped table-responsive">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Artist</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="song in songsList">
+                        <td ng-bind="song.title"> </td>
+                        <td ng-bind="song.artist"> </td>
+                        <tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 </body>
+
 </html>

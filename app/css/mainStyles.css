@@ -1,3 +1,28 @@
+body{
+	overflow: hidden;
+}
+#player{
+	float: left;
+	display: inline-block;
+	height: 100%;
+	width: 50%;
+}
+#playlist{
+	height: 450px;
+	float: right;
+	display: inline-block;
+	border: solid;
+	width: 47%;
+	overflow-y: scroll;
+}
+#playlist table{
+	table-layout: fixed;
+	width: 100%;
+	font-size: 11px;
+}
+#playlist table td{
+	width: 150px;
+}
 .cSong{
 	background-color: cyan;
 }
@@ -25,7 +50,7 @@
 .controls{
 	height: 15%;
 	background-color: white;
-	margin-left: 15%;
+	margin-left: 10%;
 }
 .controls span{
 	display:inline-block;

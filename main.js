@@ -12,12 +12,12 @@ app.on('window-all-closed', function() {
     }
 });
 app.on('ready', function() {
-	mainWindow = new BrowserWindow({width: 450, height: 450, resizable: false});
-	mainWindow.loadURL('file://' + __dirname + '/app/getDir.html');
+	mainWindow = new BrowserWindow({width: 750, height: 450, resizable: false});
+	mainWindow.loadURL('file://' + __dirname + '/app/index.html');
 	mainWindow.on('closed', function() {
 		mainWindow = null;
 	});
 });
-ipc.on('load-page', (event, arg) => {
-    mainWindow.loadURL(arg);
-});
+// ipc.on('load-page', (event, arg) => {
+//     mainWindow.loadURL(arg);
+// });  //load new url given in arg

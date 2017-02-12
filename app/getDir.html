@@ -9,22 +9,21 @@
     <script src="js/angular-route.js"></script>
     <link href="css/bootstrap.css" rel="stylesheet" type="text/css"/>
     <script>
-        const ipc = require('electron').ipcRenderer;
-        var remote = require('remote');
-        var dialog = remote.require('electron').dialog;
-        var proceed = function () {
-            console.log(document.getElementById("dirSelected"));
-            var path = dialog.showOpenDialog({
-                properties: ['openDirectory']
-            });
-//            localStorage.setItem("chosenDir",)
-           // ipc.send('load-page', 'file://' + __dirname + '/index.html');
+      const remote = require('electron').remote;
+      const ipcRenderer = require('electron').ipcRenderer;
+      const {dialog} = require('electron').remote
+      var choose = function() {
+        //console.log(dialog.showOpenDialog({properties: ['openFile', 'openDirectory', 'multiSelections']}));
+        var path=dialog.showOpenDialog({properties: ['openFile', 'openDirectory', 'multiSelections']});
+        if(path!='' && path!=undefined){
+          localStorage.setItem("chosenDir",dialog.showOpenDialog({properties: ['openFile', 'openDirectory', 'multiSelections']}));
+          ipcRenderer.send('load-page', 'file://' + __dirname + '/index.html');
         }
+      }
     </script>
 </head>
 <body ng-app="myApp" ng-controller="mainController">
     Select a directory filled with songs:<br>
-    <input id="dirSelected" type="file" webkitdirectory />
-    <button onclick="proceed()">Submit</button>
+    <button id="choose" onclick="choose()">Choose Directory</button>
 </body>
 </html>
