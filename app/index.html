@@ -37,7 +37,7 @@
               <img src="images/shuffle.png" ng-click="restartAudio();"/>
 			      </span>
             <span>
-              <img src="images/rew.png" ng-click="nextAudio();"/><!-- onmouseover="this.src='images/rew_hover.png'" onmouseout="this.src='images/rew.png'" /> -->
+              <img src="images/rew.png" ng-click="prevAudio();"/><!-- onmouseover="this.src='images/rew_hover.png'" onmouseout="this.src='images/rew.png'" /> -->
 			      </span>
             <span>
               <img src="images/play.png" id="play" ng-click="playAudio()" ng-if="!audioPlayingFlag" onmouseover="this.src='images/play_hover.png'" onmouseout="this.src='images/play.png'" />
@@ -55,8 +55,8 @@
         <div id="addFiles">
             <button id="addFolder" ng-click="addFolder()">Add Folder</button>
         </div>
-        <div>
-            <table class="table-striped table-responsive">
+        <div ng-show=songsList>
+            <table class="table-striped">
                 <thead>
                     <tr>
                         <th>Title</th>
@@ -66,7 +66,7 @@
                 <tbody>
                     <tr ng-repeat="song in songsList">
                         <td ng-bind="song.title"> </td>
-                        <td ng-bind="song.artist"> </td>
+                        <td> {{song.artist || "-"}}</td>
                         <tr>
                 </tbody>
             </table>

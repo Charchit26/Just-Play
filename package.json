@@ -1,5 +1,6 @@
 {
   "name": "just-play",
+  "productName": "Just-Play",
   "version": "0.1.0",
   "main": "./main.js",
   "scripts": {
@@ -7,6 +8,7 @@
   },
   "devDependencies": {
     "electron": "^1.4.13",
-    "id3js" : ""
+    "id3js" : "",
+    "collections" : ""
   }
 }
