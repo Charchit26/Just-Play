@@ -59,7 +59,18 @@ body{
 .controls span:hover{
 	cursor: pointer;
 }
-
+/* For vertical volume slider uncomment this*/
+/*.volume	input[type=range][orient=vertical]{
+    writing-mode: bt-lr; /* IE */
+/*    -webkit-appearance: slider-vertical; /* WebKit */
+/*    width: 8px;
+    height: 100px;
+    padding: 0 5px;
+}*/
+.labnVol span{
+	float: right;
+	cursor: pointer;
+}
 /*Chrome*/
 @media screen and (-webkit-min-device-pixel-ratio:0) {
     .seekbar input[type='range'] {
